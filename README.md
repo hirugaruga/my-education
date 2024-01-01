@@ -1,1 +1,1 @@
-Еhis repository will tell you what I learned on my own.
+This repository will tell you what I learned on my own.
