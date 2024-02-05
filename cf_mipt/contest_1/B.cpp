@@ -1,6 +1,4 @@
-//
-// Created by Timur on 17.12.2023.
-//
+
 #include "iostream"
 #include "string"
 class Stack {

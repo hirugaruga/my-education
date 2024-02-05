@@ -1,6 +1,3 @@
-//
-// Created by Timur on 15.12.2023.
-//
 #include <string>
 #include <iostream>
 #include <map>
