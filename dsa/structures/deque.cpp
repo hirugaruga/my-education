@@ -1,3 +1,5 @@
+#include<iostream>
+
 template<typename T>
 class Deque {
  public:
@@ -60,7 +62,6 @@ void Deque<T>::push_back(T val) {
   tail_ = tmp;
   ++size_;
 }
-}
 
 template<typename T>
 T Deque<T>::pop_back() {
@@ -68,7 +69,7 @@ T Deque<T>::pop_back() {
 	std::cerr << "Deque::pop_back: empty deque";
   }
   Node* tmp = tail_;
-  if (size_ != 0) {
+  if (size_ != 1) {
 	tail_ = tmp->next;
 	tmp->next->prev = nullptr;
   } else {
@@ -79,4 +80,49 @@ T Deque<T>::pop_back() {
   delete tmp;
   --size_;
   return val;
+}
+
+template<typename T>
+T Deque<T>::pop_front() {
+  if (size_ == 0) {
+	std::cerr << "Deque::pop_front: empty deque";
+  }
+  Node* tmp = head_;
+  if (size_ != 1) {
+	head_ = tmp->prev;
+	head_->next = nullptr;
+  } else {
+	tail_ = nullptr;
+	head_ = nullptr;
+  }
+  T val = tmp->val;
+  delete tmp;
+  --size_;
+  return val;
+}
+template<typename T>
+void Deque<T>::clear() {
+  while (size_ != 0) {
+	Node* tmp = tail_;
+	tail_ = tmp->next;
+	delete tmp;
+	--size_;
+  }
+  head_ = nullptr;
+  tail_ = nullptr;
+}
+
+template<typename T>
+T Deque<T>::front() const {
+  return head_->val;
+}
+
+template<typename T>
+T Deque<T>::back() const {
+  return tail_->val;
+}
+
+template<typename T>
+int Deque<T>::size() const {
+  return size_;
 }
