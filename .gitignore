@@ -2,3 +2,4 @@
 cmake-build-debug
 CMakeLists.txt
 a.exe
+test_cpp
