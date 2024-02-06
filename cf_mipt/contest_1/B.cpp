@@ -1,6 +1,6 @@
-
 #include "iostream"
 #include "string"
+
 class Stack {
  public:
   Stack();
@@ -43,8 +43,7 @@ char Stack::back() {
 char skobka(char elem) {
   if (elem == '(') {
 	return ')';
-  }
-  else {
+  } else {
 	return elem + 2;
   }
 }
