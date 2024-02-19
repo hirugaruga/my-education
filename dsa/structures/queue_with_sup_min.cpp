@@ -1,15 +1,13 @@
-//#include <iostream>
+#include <iostream>
 
-//unwork version
 template<typename T>
-class Queue{
+class Queue {
  public:
-  Queue();
   void enque(T val);
   T dequeue();
   T min();
  private:
-  int size_;
+  int size_ = 0;
   Stack<T> add_;
   Stack<T> del_;
 };
@@ -36,9 +34,28 @@ class Stack {
   Node* top_;
   int size_;
 };
+
 /****************************Queue*********************************************/
 template<typename T>
-Queue<T>
+void Queue<T>::enque(T val) {
+  add_.push(val);
+  ++size;
+}
+template<typename T>
+T Queue<T>::dequeue() {
+  if (del_.size() == 0) {
+	while (add_.size() != 0) {
+	  del_.push(add_.pop());
+	}
+	return del_.pop();
+  } else {
+	return del_.pop()
+  }
+}
+template<typename T>
+T Queue<T>::min() {
+  return std::min(add_.min(), del_.min());
+}
 /****************************Stack*********************************************/
 template<typename T>
 Stack<T>::Stack() {

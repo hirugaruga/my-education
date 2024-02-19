@@ -84,9 +84,9 @@ void Stack<T>::clear() {
 template<typename T>
 bool Stack<T>::empty() {
   if (size_ == 0) {
-	return True
+	return true;
   } else {
-	return False
+	return false;
   }
 }
 

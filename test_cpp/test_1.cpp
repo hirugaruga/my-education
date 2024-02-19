@@ -1,22 +1,19 @@
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <string>
 
-int solve(int n, std::vector<int>& dp) {
-  if (n < 0) {
-	return 0;
-  }
-  if (n == 0) {
-	return 1;
-  }
-  if (dp[n] != -1) {
-	return dp[n];
-  }
-  dp[n] = solve(n - 1, dp) + solve(n - 2, dp);
-  return dp[n];
-}
 int main() {
-  int n;
-  std::cin >> n;
-  std::vector<int> dp(n + 1, -1);
-  std::cout << solve(n, dp);
+	long long t;
+	std::cin >> t;
+	for (int i = 0; i < t; ++i) {
+		long long n;
+		std::string s;
+		std::cin >> n >> s;
+		if (s.find_last_of('B') == s.find_first_of('B') && s.find_first_of('B') != -1 ) {
+			std::cout << 1 << '\n';
+		} else if (s.find_last_of('B') == -1) {
+			std::cout << 0;
+		} else {
+			std::cout << s.find_last_of('B') - s.find_first_of('B') + 1 << '\n';
+		}
+	}
 }

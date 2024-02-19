@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-class 1{
+class String{
  private:
 
  public:
