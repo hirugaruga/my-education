@@ -9,20 +9,20 @@ class String {
  public:
 	String();
 	String(const char* s);
+	String(char c);
 	String(size_t n, char c);
 	String(const String& s);
 	String(std::initializer_list<char> lst);
 	~String();
 	String& operator=(String s);
-	bool operator==(const String& left, const String& right);
-	//bool operator==(const String& left, const char*);
-	char operator[](const String& s, size_t pos);
-	String& operator+(const String& left, const String& right);
 	String& operator+=(char c);
 	String& operator+=(const String&);
+	friend String operator+(const String& left, const String& right);
+	friend std::ostream& operator<<(std::ostream& out, const String s);
+	char& operator[](size_t pos) const;
 	char& front();
 	char& back();
-	size_t length();
+	size_t length() const;
 	void push_back(char c);
 	char pop_back();
 	void swap(String& s);
@@ -31,44 +31,49 @@ class String {
 	char* str_;
 };
 
-String::String() : cz_(0), str_(nullptr) {}
+String::String() : sz_(0), str_(nullptr) {}
+
+String::String(const char* s) : sz_(std::strlen(s)), str_(new char[std::strlen(s)]) {
+	memcpy(str_, s, sz_);
+}
+
+String::String(char c) : sz_(1), str_(new char[1]) {
+	memset(str_, c, 1);
+	cout << "char c " << *str_ << *(str_ +1);
+}
+
+String::String(size_t n, char c) : sz_(n), str_(new char[n]) {
+	memset(str_, c, n); //memory with that adress, with what, how much
+}
+
+String::String(const String& s) : sz_(s.sz_), str_(new char[s.sz_]) {
+	memcpy(str_, s.str_, sz_); // where, whom, how much
+}
+
+String::String(std::initializer_list<char> lst) : sz_(lst.size()), str_(new char[lst.size()]) {
+	std::copy(lst.begin(), lst.end(), str_);
+}
 
 String::~String() {
 	delete[] str_;
 }
 
-String::String(size_t n, char c) : str_(new char[n]), sz_(n) {
-	memset(str_, c, n); //memory with that adress, with what, how much
-}
-
-String::String(const String& s) : str_(new char[s.sz_]), sz_(s.sz_) {
-	memcpy(str_, s.str_, sz_); // where, whom, how much
-}
-
-String::String(std::initializer_list<char> lst) : str_(new char[lst.size()]), sz_(lst.size()) {
-	std::copy(lst.begin(), lst.end(), str_);
-}
-
-void String::swap(String& s) {
-	std::swap(sz_, s.sz_);
-	std::swap(str_, s.str_);
-}
-
-bool String::operator==(const String& left, const String& right) {
-	if (left.sz_ != right.sz_) {
+bool operator==(const String& left, const String& right) {
+	if (left.length() != right.length()) {
 		return false;
 	} else {
 		size_t it = 0;
-		while (it <= left.sz_) {
-			if (left.str_ + it != right.str_ + it) {
+		while (it <= left.length()) {
+			if (left[it] != right[it]) {
 				return false;
 			}
+			++it;
 		}
 		return true;
 	}
 }
 
-char String::operator[](size_t pos) {
+char& String::operator[](size_t pos) const {
 	return *(this->str_ + pos);
 }
 
@@ -83,12 +88,11 @@ String& String::operator=(String s) {
 	return *this;
 }
 
-size_t String::length() {
-	return this->sz_;
+size_t String::length() const {
+	return sz_;
 }
 /*
 void String::push_back(char c) {
-
 }
 */
 char& String::front() {
@@ -99,20 +103,46 @@ char& String::back() {
 	return *(this->str_ + sz_);
 }
 
-String& String::operator+(const String& left, const String& right) {
+String operator+(const String& left, const String& right) {
 	String temp;
 	delete[] temp.str_;
-	temp.sz_ = left.sz_ + right.cz_;
-	temp.str_ = new char[sz_];
+	temp.sz_ = left.sz_ + right.sz_;
+	temp.str_ = new char[temp.sz_];
 	std::strcpy(temp.str_, std::strcat(left.str_, right.str_));
 	return temp;
 }
 
-String& String::operator+=(char c) {
+String& String::operator+=(char c) {}
+
+String& String::operator+=(const String&) {
 
 }
-String& String::operator+=(const String&) {}
+
+std::ostream& operator<<(std::ostream& out, const String s) {
+	out << s.str_;
+	return out;
+}
+std::istream& operator>>(std::istream& is, String& s) {
+	char* buff = new char[1000];
+	memset(&buff[0], 0, sizeof(buff)/sizeof(buff[0]));
+	is >> buff;
+	s = String{buff};
+	delete[] buff;
+	return is;
+}
+
+void String::swap(String& s) {
+	std::swap(sz_, s.sz_);
+	std::swap(str_, s.str_);
+}
 
 int main() {
-	String s(5, '2');
+	//String s1 = "asd"; // ub
+	//String s2 = 'a'; // ub
+	String s3(5, '3');
+	String s4;
+	//cout << s1 << "\n";
+	//cout << s2 << "\n";
+	cout << s3 << "!!!!";
+	cout << s4;
 }
