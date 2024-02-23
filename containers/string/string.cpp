@@ -18,7 +18,7 @@ class String {
 	String& operator+=(char c);
 	String& operator+=(const String&);
 	friend String operator+(const String& left, const String& right);
-	friend std::ostream& operator<<(std::ostream& out, const String s);
+	friend std::ostream& operator<<(std::ostream& out, const String& s);
 	char& operator[](size_t pos) const;
 	char& front();
 	char& back();
@@ -39,7 +39,6 @@ String::String(const char* s) : sz_(std::strlen(s)), str_(new char[std::strlen(s
 
 String::String(char c) : sz_(1), str_(new char[1]) {
 	memset(str_, c, 1);
-	cout << "char c " << *str_ << *(str_ +1);
 }
 
 String::String(size_t n, char c) : sz_(n), str_(new char[n]) {
@@ -74,6 +73,10 @@ bool operator==(const String& left, const String& right) {
 }
 
 char& String::operator[](size_t pos) const {
+	if (pos > sz_) {
+		std::cerr << "String::operator[] : string index out of range\n";
+		exit(0);
+	}
 	return *(this->str_ + pos);
 }
 
@@ -91,10 +94,11 @@ String& String::operator=(String s) {
 size_t String::length() const {
 	return sz_;
 }
-/*
+
 void String::push_back(char c) {
+
 }
-*/
+
 char& String::front() {
 	return *this->str_;
 }
@@ -114,17 +118,28 @@ String operator+(const String& left, const String& right) {
 
 String& String::operator+=(char c) {}
 
-String& String::operator+=(const String&) {
-
+String& String::operator+=(const String& other) {
+	if (other.sz_) {
+		size_t size = sz_ + other.sz_;
+		char* buff = new char[size + 1];
+		strcpy(buff, str_);
+		strcat(buff, other.str_);
+		delete[] str_;
+		str_ = buff;
+		sz_  = size;
+	}
+	return *this;
 }
 
-std::ostream& operator<<(std::ostream& out, const String s) {
-	out << s.str_;
+std::ostream& operator<<(std::ostream& out, const String& s) {
+	for (size_t i = 0; i < s.sz_; ++i) {
+		out << *(s.str_ + i);
+	}
 	return out;
 }
 std::istream& operator>>(std::istream& is, String& s) {
 	char* buff = new char[1000];
-	memset(&buff[0], 0, sizeof(buff)/sizeof(buff[0]));
+	memset(&buff[0], 0, sizeof(buff) / sizeof(buff[0]));
 	is >> buff;
 	s = String{buff};
 	delete[] buff;
@@ -137,12 +152,9 @@ void String::swap(String& s) {
 }
 
 int main() {
-	//String s1 = "asd"; // ub
-	//String s2 = 'a'; // ub
-	String s3(5, '3');
-	String s4;
-	//cout << s1 << "\n";
-	//cout << s2 << "\n";
-	cout << s3 << "!!!!";
-	cout << s4;
+	String s = 's';
+	String ss = "11111";
+	s = s + ss;
+	cout << s
+	;
 }
